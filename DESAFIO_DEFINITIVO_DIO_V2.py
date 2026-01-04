@@ -125,6 +125,26 @@ def imprime_extrato(cpf):
                 print(f" - tipo: {mov["tipo"]}  --- valor: R${mov["valor"]:.2f}")
     return 0
 
+
+def log_transacao(funcao):
+    def imprime_log(*args, **kwargs):
+        match funcao.__name__: #verifica o nome da função
+            case 'cria_usuario':
+                agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                print(f"[{agora}] - Foi realizado o processo de Criaçao de usuário.\n")
+
+            case 'deposito':
+                agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                print(f"[{agora}] - Foi realizado o processo de Depósito.\n")
+
+            case 'saque':
+                agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                print(f"[{agora}] - Foi realizado o processo de Saque.\n")
+
+        return funcao(*args, **kwargs)
+
+    return imprime_log
+
 def decoradores():
     pass
 
