@@ -18,6 +18,10 @@ def log_transacao(funcao):
                 agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 print(f"[{agora}] - Foi realizado o processo de Saque.\n")
 
+            case 'imprime_extrato':
+                agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                print(f"[{agora}] - Foi realizado o processo de Impressão de Extrato")
+
         return funcao(*args, **kwargs)
 
     return imprime_log
@@ -128,6 +132,7 @@ def armazena_extrato(cpf, movimentacao, valor):
         })
     return 0
 
+@log_transacao
 def imprime_extrato(cpf):
 
     for i in listExtrato:
@@ -145,14 +150,22 @@ def imprime_extrato(cpf):
                 print(f" - tipo: {mov["tipo"]}  --- valor: R${mov["valor"]:.2f}")
     return 0
 
-def decoradores():
-    pass
+class ContaIterador():
+    def __init__(self, lista: list[dict]):
+        self.contador = 0
+        self.lista = lista
 
-def iterador():
-    pass
+    def __iter__(self):
+        return self
 
-def gerador():
-    pass 
+    def __next__(self):
+            if self.contador >= len(self.lista):
+                raise StopIteration
+            
+            else:
+                conta = self.lista[self.contador]
+                self.contador += 1
+                return conta
     
 menu = """
 [c] cria nova conta
@@ -160,6 +173,7 @@ menu = """
 [s] Sacar
 [e] Extrato
 [q] Sair
+[i] Imprimir Usuários
 
 => """
 
@@ -214,3 +228,12 @@ while True:
                 conta = str(input("Insira conta que deseja imprimir o extrato: "))
 
             imprime_extrato(conta)
+
+    elif opcao == "i":
+        if listUserCadastrados == []:
+            print("Sem usuários cadastrados.")
+            
+        else:
+            contas = ContaIterador(listUserCadastrados)
+            for i in contas:
+                print(i)
