@@ -124,6 +124,15 @@ def imprime_extrato(cpf):
             for mov in i["movimentacao"]:
                 print(f" - tipo: {mov["tipo"]}  --- valor: R${mov["valor"]:.2f}")
     return 0
+
+def decorador():
+    return
+
+def iterador():
+    return
+
+def gerador():
+    return 
     
 menu = """
 [c] cria nova conta
