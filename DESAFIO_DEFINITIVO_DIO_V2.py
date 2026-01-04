@@ -126,7 +126,7 @@ def imprime_extrato(cpf):
     return 0
 
 def decoradores():
-    return
+    pass
 
 def iterador():
     return
