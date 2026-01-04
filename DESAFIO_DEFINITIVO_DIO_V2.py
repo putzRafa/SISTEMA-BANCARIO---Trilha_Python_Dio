@@ -125,7 +125,7 @@ def imprime_extrato(cpf):
                 print(f" - tipo: {mov["tipo"]}  --- valor: R${mov["valor"]:.2f}")
     return 0
 
-def decorador():
+def decoradores():
     return
 
 def iterador():
