@@ -150,6 +150,30 @@ def imprime_extrato(cpf):
                 print(f" - tipo: {mov["tipo"]}  --- valor: R${mov["valor"]:.2f}")
     return 0
 
+class Relatorios():
+
+    def __init__(self, extrato):
+        self.lista = extrato
+
+    def gerador_relatorios(self, transacao = None):
+
+        if not transacao:
+            for i in self.lista:
+                for mov in i["movimentacao"]:
+                    yield mov
+
+        elif transacao ==  "depósito":
+            for i in self.lista:
+                for mov in i["movimentacao"]:
+                    if mov["tipo"] == "depósito":
+                        yield mov
+
+        elif transacao == "saque":
+            for i in self.lista:
+                for mov in i["movimentacao"]:
+                    if mov["tipo"] == "saque":
+                        yield mov
+
 class ContaIterador():
     def __init__(self, lista: list[dict]):
         self.contador = 0
@@ -174,6 +198,7 @@ menu = """
 [e] Extrato
 [q] Sair
 [i] Imprimir Usuários
+[g] Gerar Relatório de Extrato
 
 => """
 
@@ -232,8 +257,31 @@ while True:
     elif opcao == "i":
         if listUserCadastrados == []:
             print("Sem usuários cadastrados.")
-            
+
         else:
             contas = ContaIterador(listUserCadastrados)
             for i in contas:
                 print(i)
+
+    elif opcao == "g":
+        valor = int(input('''Deseja imprimir o relatório completo, de depósito ou de saque?
+Saque    --> 1
+Depósito --> 2
+Completo --> 3\n'''))
+        if listExtrato == []:
+            print("Não há movimentações para serem registradas no relatório.")
+        
+        if valor == 1:
+            relatorio = Relatorios(listExtrato)
+            for i in relatorio.gerador_relatorios("saque"):
+               print(i)
+
+        elif valor == 2:
+            relatorio = Relatorios(listExtrato)
+            for i in relatorio.gerador_relatorios("depósito"):
+               print(i)
+
+        else:
+           relatorio = Relatorios(listExtrato)
+           for i in relatorio.gerador_relatorios():
+               print(i)
