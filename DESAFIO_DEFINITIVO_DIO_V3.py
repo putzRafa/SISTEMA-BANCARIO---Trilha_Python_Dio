@@ -1,3 +1,4 @@
+import pathlib as Path
 from datetime import datetime
 listUserCadastrados = []
 listExtrato = []
@@ -27,6 +28,8 @@ def log_transacao(funcao):
     return imprime_log
 
 def salva_log(funcao):
+    def usuario(*args, **kwargs):
+        pass
     pass
 
 @log_transacao
