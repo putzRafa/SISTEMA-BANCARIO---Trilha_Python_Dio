@@ -1,5 +1,7 @@
-import pathlib as Path
+from pathlib import Path
 from datetime import datetime
+
+ROOT_PATH = Path(__file__)
 listUserCadastrados = []
 listExtrato = []
 contUser = 0
@@ -28,10 +30,44 @@ def log_transacao(funcao):
     return imprime_log
 
 def salva_log(funcao):
-    def usuario(*args, **kwargs):
-        pass
-    pass
+    def cria_log(*args, **kwargs):
+        match funcao.__name__:
+            case 'cria_usuario':
+                resultado = funcao(*args, **kwargs)
 
+                cpf  = None
+                if isinstance(resultado, dict) and "CPF" in resultado:
+                    cpf = resultado["CPF"]
+
+                if "cpf" in kwargs:
+                    cpf = kwargs["cpf"]
+
+                elif len(args) > 0:
+                    for nums in args:
+                        if isinstance(nums, str) and len(nums) == 11:
+                            cpf = nums
+                            break
+
+                if cpf:
+                    logs_dir = ROOT_PATH.parent / "logs"
+                    logs_dir.mkdir(exist_ok=True)
+
+                    arquivo = logs_dir/f"log-{cpf}.txt"
+
+                    with open(arquivo, "a", encoding="utf-8") as file:
+                        file.write(f"REGISTRO DE LOGS - USUÁRIO: {cpf}\n")
+
+                return resultado
+
+            case 'saque':
+                pass
+
+            case 'deposito':
+                pass
+            
+    return cria_log
+
+@salva_log
 @log_transacao
 def cria_usuario ():
     global contUser
@@ -209,6 +245,7 @@ menu = """
 => """
 
 while True:
+    print(ROOT_PATH)
     opcao = input(menu)
 
     if opcao == "c":
