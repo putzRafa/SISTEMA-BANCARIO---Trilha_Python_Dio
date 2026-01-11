@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import datetime
+from functools import wraps
 
 ROOT_PATH = Path(__file__)
 listUserCadastrados = []
@@ -7,6 +8,7 @@ listExtrato = []
 contUser = 0
 
 def log_transacao(funcao):
+    @wraps(funcao)
     def imprime_log(*args, **kwargs):
         match funcao.__name__: #verifica o nome da função
             case 'cria_usuario':
@@ -30,6 +32,7 @@ def log_transacao(funcao):
     return imprime_log
 
 def salva_log(funcao):
+    @wraps(funcao)
     def cria_log(*args, **kwargs):
         match funcao.__name__:
             case 'cria_usuario':
@@ -273,7 +276,6 @@ menu = """
 => """
 
 while True:
-    print(ROOT_PATH)
     opcao = input(menu)
 
     if opcao == "c":
