@@ -60,10 +60,36 @@ def salva_log(funcao):
                 return resultado
 
             case 'saque':
-                pass
+                resultado = funcao(*args, **kwargs)
+                cpf = kwargs["cpf"]
+                valor = kwargs["valor"]
 
+                if resultado == 2:
+                    logs_dir = ROOT_PATH.parent / "logs" 
+                    logs_dir.mkdir(exist_ok=True)
+
+                    arquivo = logs_dir / f"log-{cpf}.txt"
+
+                        
+                    with open(arquivo, "a", encoding="utf-8") as file:
+                        file.write(f"REALIZADO O SAQUE NO VALOR DE R${valor} - CONTA: {cpf}")
+
+                return resultado
+            
             case 'deposito':
-                pass
+                resultado = funcao(*args, **kwargs)
+                valor, cpf = args
+
+                if resultado == 1:
+                    logs_dir = ROOT_PATH.parent / "logs"
+                    logs_dir.mkdir(exist_ok=True)
+
+                    arquivo = logs_dir / f"log-{cpf}.txt"
+
+                    with open(arquivo, "a", encoding="utf-8") as file:
+                        file.write(f"DEPÓSITO REALIZADO NO VALOR DE R${valor} - CONTA: {cpf}")
+
+                return resultado
             
     return cria_log
 
