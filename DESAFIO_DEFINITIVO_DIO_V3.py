@@ -151,6 +151,7 @@ def cria_conta_corrente(cadastro, numUsuario):
      cadastro["digito"] = numUsuario
      cadastro["saldo"] = 0
 
+@salva_log
 @log_transacao
 def deposito(valor, cpf, /):
     for usuario in listUserCadastrados:
@@ -160,6 +161,7 @@ def deposito(valor, cpf, /):
             return 1
     return False
 
+@salva_log
 @log_transacao
 def saque(*, valor, cpf):
     for usuario in listUserCadastrados:
